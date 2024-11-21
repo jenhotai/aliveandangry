@@ -1,0 +1,34 @@
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# Mock database
+offenders = []
+reports = []
+
+# Route to add an offender
+@app.route('/add_offender', methods=['POST'])
+def add_offender():
+    data = request.json
+    offenders.append(data)
+    return jsonify({"message": "Offender added successfully!"}), 201
+
+# Route to list all offenders
+@app.route('/offenders', methods=['GET'])
+def list_offenders():
+    return jsonify(offenders), 200
+
+# Route to report an incident
+@app.route('/report', methods=['POST'])
+def report_incident():
+    data = request.json
+    reports.append(data)
+    return jsonify({"message": "Incident reported successfully!"}), 201
+
+# Route to list all incidents
+@app.route('/reports', methods=['GET'])
+def list_reports():
+    return jsonify(reports), 200
+
+if __name__ == '__main__':
+    app.run(debug=True)

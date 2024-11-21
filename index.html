@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global DV Registry</title>
+</head>
+<body>
+    <h1>Global Domestic Violence Registry</h1>
+
+    <h2>Add Offender</h2>
+    <form id="offenderForm">
+        <input type="text" id="name" placeholder="Name" required />
+        <input type="text" id="dob" placeholder="Date of Birth" required />
+        <input type="text" id="description" placeholder="Description" required />
+        <button type="submit">Add Offender</button>
+    </form>
+
+    <h2>Offender List</h2>
+    <button id="viewOffenders">View All Offenders</button>
+    <ul id="offenderList"></ul>
+
+    <script>
+        document.getElementById('offenderForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const dob = document.getElementById('dob').value;
+            const description = document.getElementById('description').value;
+
+            await fetch('/add_offender', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, dob, description }),
+            });
+
+            alert('Offender added successfully!');
+        });
+
+        document.getElementById('viewOffenders').addEventListener('click', async () => {
+            const response = await fetch('/offenders');
+            const offenders = await response.json();
+            const offenderList = document.getElementById('offenderList');
+            offenderList.innerHTML = offenders.map(offender => `<li>${offender.name}</li>`).join('');
+        });
+    </script>
+</body>
+</html>
